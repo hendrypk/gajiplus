@@ -33,16 +33,10 @@
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.all.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
-
-  <!-- flatpickr date -->
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
-  <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
-  
-  <!-- Show Maps -->
-  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
-
   <!-- Template Main CSS File -->
   <link href="{{asset('assets/css/style.css')}}" rel="stylesheet">
+
+  <link rel="manifest" href="/manifest.json">
 
 </head>
 <header id="header" class="">    
@@ -84,6 +78,11 @@
                             </div>
                         </div>
                     </div>
+                    <div class="row mt-4">
+                        <div class="col-md-12 text-center">
+                            <button id="installBtn" class="btn btn-tosca">Install App</button>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -107,6 +106,44 @@
   <script src="{{ asset('assets/js/release.js') }}"></script>
 
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+    <!-- Install App Script -->
+    <script>
+        let deferredPrompt;
+        const installBtn = document.getElementById('installBtn');
+    
+        window.addEventListener('beforeinstallprompt', (e) => {
+          e.preventDefault();
+          deferredPrompt = e;
+          installBtn.style.display = 'block';
+    
+          installBtn.addEventListener('click', () => {
+            installBtn.style.display = 'none';
+            deferredPrompt.prompt();
+            deferredPrompt.userChoice.then((choiceResult) => {
+              if (choiceResult.outcome === 'accepted') {
+                console.log('User accepted the install prompt');
+              } else {
+                console.log('User dismissed the install prompt');
+              }
+              deferredPrompt = null;
+            });
+          });
+        });
+    
+        window.addEventListener('appinstalled', () => {
+          console.log('App successfully installed');
+          installBtn.style.display = 'none';
+        });
+      </script>
+      
+      <script>
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('/service-worker.js')
+                .then(reg => console.log('Service Worker Registered:', reg))
+                .catch(err => console.error('Service Worker Error:', err));
+        }
+    </script>
 
   <style>
     /* Pastikan gambar responsif dengan proporsi terjaga */

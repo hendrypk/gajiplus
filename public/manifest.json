@@ -1,7 +1,7 @@
 {
     "name": "Gajiplus",
     "short_name": "Gajiplus",
-    "start_url": "https://gajiplus.my.id",
+    "start_url": "/",
     "display": "standalone",
     "scope" : "/",
     "background_color": "#000000",
